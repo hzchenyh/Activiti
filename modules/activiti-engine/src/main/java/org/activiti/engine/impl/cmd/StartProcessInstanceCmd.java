@@ -13,9 +13,6 @@
  */
 package org.activiti.engine.impl.cmd;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiIllegalArgumentException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
@@ -28,6 +25,9 @@ import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.runtime.ProcessInstanceBuilderImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+
+import java.io.Serializable;
+import java.util.Map;
 
 
 /**
@@ -68,7 +68,7 @@ public class StartProcessInstanceCmd<T> implements Command<ProcessInstance>, Ser
       .getProcessEngineConfiguration()
       .getDeploymentManager();
     
-    // Find the process definition
+    // Find the process definition，通过部署管理器查询出流程定义实体
     ProcessDefinitionEntity processDefinition = null;
     if (processDefinitionId != null) {
       processDefinition = deploymentManager.findDeployedProcessDefinitionById(processDefinitionId);

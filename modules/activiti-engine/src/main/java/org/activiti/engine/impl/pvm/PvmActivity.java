@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * @author Tom Baeyens
+ * 流程节点
  */
 public interface PvmActivity extends PvmScope {
   

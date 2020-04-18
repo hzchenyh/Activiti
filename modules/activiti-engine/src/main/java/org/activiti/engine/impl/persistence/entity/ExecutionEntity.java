@@ -13,15 +13,6 @@
 
 package org.activiti.engine.impl.persistence.entity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.EngineServices;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -39,13 +30,7 @@ import org.activiti.engine.impl.history.HistoryManager;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.jobexecutor.AsyncContinuationJobHandler;
 import org.activiti.engine.impl.jobexecutor.TimerDeclarationImpl;
-import org.activiti.engine.impl.pvm.PvmActivity;
-import org.activiti.engine.impl.pvm.PvmException;
-import org.activiti.engine.impl.pvm.PvmExecution;
-import org.activiti.engine.impl.pvm.PvmProcessDefinition;
-import org.activiti.engine.impl.pvm.PvmProcessElement;
-import org.activiti.engine.impl.pvm.PvmProcessInstance;
-import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.impl.pvm.*;
 import org.activiti.engine.impl.pvm.delegate.ActivityExecution;
 import org.activiti.engine.impl.pvm.delegate.ExecutionListenerExecution;
 import org.activiti.engine.impl.pvm.delegate.SignallableActivityBehavior;
@@ -64,12 +49,16 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+
 
 /**
  * @author Tom Baeyens
  * @author Daniel Meyer
  * @author Falko Menge
  * @author Saeid Mirzaei
+ *
+ * 一个流程定义被启动后的执行实例，代表着流程的运行期状态
  */
 
 public class ExecutionEntity extends VariableScopeImpl implements ActivityExecution, ExecutionListenerExecution, Execution, PvmExecution, 

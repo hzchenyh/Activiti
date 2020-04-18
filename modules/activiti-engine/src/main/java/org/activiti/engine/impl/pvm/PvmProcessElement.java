@@ -18,6 +18,7 @@ import java.io.Serializable;
 
 /**
  * @author Tom Baeyens
+ * 流程元素
  */
 public interface PvmProcessElement extends Serializable {
 

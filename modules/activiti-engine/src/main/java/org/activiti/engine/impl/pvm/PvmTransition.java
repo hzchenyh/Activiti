@@ -19,6 +19,7 @@ import org.activiti.engine.delegate.Expression;
 
 /**
  * @author Tom Baeyens
+ * 连线
  */
 public interface PvmTransition extends PvmProcessElement {
 

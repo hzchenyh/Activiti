@@ -13,20 +13,21 @@
 
 package org.activiti.engine.impl.pvm.process;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmException;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.delegate.ActivityBehavior;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @author Tom Baeyens
+ * 一个流程定义中的所有节点都会被解析成ActivityImpl对象
  */
 public class ActivityImpl extends ScopeImpl implements PvmActivity, HasDIBounds {
 

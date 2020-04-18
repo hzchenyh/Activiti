@@ -19,11 +19,16 @@ import java.util.Map;
 
 /**
  * @author Tom Baeyens
+ * 流程执行当前处于哪一个流程节点
  */
 public interface PvmExecution {
 
   void signal(String signalName, Object signalData);
 
+  /**
+   * 返回当前流程执行所处的流程节点
+   * @return
+   */
   PvmActivity getActivity();
   
   boolean hasVariable(String variableName);

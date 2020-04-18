@@ -25,9 +25,14 @@ import org.activiti.engine.impl.pvm.process.TransitionImpl;
 
 /**
  * @author Tom Baeyens
+ * 流程执行是如何从一个节点运行至下一个节点
  */
 public interface InterpretableExecution extends ActivityExecution, ExecutionListenerExecution, PvmProcessInstance {
 
+  /**
+   * 执行方法
+   * @param transition 连线对象作为入参
+   */
   void take(PvmTransition transition);
   
   void take(PvmTransition transition, boolean fireActivityCompletedEvent);

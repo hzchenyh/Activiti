@@ -17,6 +17,7 @@ package org.activiti.engine.impl.pvm.runtime;
 /**
  * @author Tom Baeyens
  * @author Daniel Meyer
+ * 执行流程节点定义的执行动作
  */
 public interface AtomicOperation {
   

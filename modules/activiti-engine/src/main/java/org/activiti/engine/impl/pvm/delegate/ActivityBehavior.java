@@ -17,8 +17,14 @@ import java.io.Serializable;
 
 /**
  * @author Tom Baeyens
+ * 流程节点的具体执行动作
  */
 public interface ActivityBehavior extends Serializable {
 
+  /**
+   * 实现不同节点的具体动作
+   * @param execution
+   * @throws Exception
+   */
   void execute(ActivityExecution execution) throws Exception;
 }

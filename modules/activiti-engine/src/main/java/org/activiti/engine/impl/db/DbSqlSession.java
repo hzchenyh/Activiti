@@ -13,45 +13,8 @@
 
 package org.activiti.engine.impl.db;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.activiti.engine.ActivitiException;
-import org.activiti.engine.ActivitiOptimisticLockingException;
-import org.activiti.engine.ActivitiWrongDbException;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngineConfiguration;
-import org.activiti.engine.impl.DeploymentQueryImpl;
-import org.activiti.engine.impl.ExecutionQueryImpl;
-import org.activiti.engine.impl.GroupQueryImpl;
-import org.activiti.engine.impl.HistoricActivityInstanceQueryImpl;
-import org.activiti.engine.impl.HistoricDetailQueryImpl;
-import org.activiti.engine.impl.HistoricProcessInstanceQueryImpl;
-import org.activiti.engine.impl.HistoricTaskInstanceQueryImpl;
-import org.activiti.engine.impl.HistoricVariableInstanceQueryImpl;
-import org.activiti.engine.impl.JobQueryImpl;
-import org.activiti.engine.impl.ModelQueryImpl;
-import org.activiti.engine.impl.Page;
-import org.activiti.engine.impl.ProcessDefinitionQueryImpl;
-import org.activiti.engine.impl.ProcessInstanceQueryImpl;
-import org.activiti.engine.impl.TaskQueryImpl;
-import org.activiti.engine.impl.UserQueryImpl;
+import org.activiti.engine.*;
+import org.activiti.engine.impl.*;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.db.upgrade.DbUpgradeStep;
@@ -63,6 +26,18 @@ import org.activiti.engine.impl.variable.DeserializedObject;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** responsibilities:
  *   - delayed flushing of inserts updates and deletes
@@ -121,8 +96,11 @@ public class DbSqlSession implements Session {
 
   protected SqlSession sqlSession;
   protected DbSqlSessionFactory dbSqlSessionFactory;
+  //所有使用insert方法放入的对象
   protected Map<Class<? extends PersistentObject>, List<PersistentObject>> insertedObjects = new HashMap<Class<? extends PersistentObject>, List<PersistentObject>>();
+  //该Map结构内存储所有通过该DbSqlSession查询出来的结果，以及update方法放入的对象
   protected Map<Class<?>, Map<String, CachedObject>> cachedObjects = new HashMap<Class<?>, Map<String,CachedObject>>();
+  //所有将要执行的删除操作
   protected List<DeleteOperation> deleteOperations = new ArrayList<DeleteOperation>();
   protected List<DeserializedObject> deserializedObjects = new ArrayList<DeserializedObject>();
   protected String connectionMetadataDefaultCatalog;
@@ -497,6 +475,12 @@ public class DbSqlSession implements Session {
     return filteredObjects;
   }
 
+  /**
+   *
+   * @param persistentObject
+   * @param storeState 是否保存当时的持久化状态
+   * @return
+   */
   protected CachedObject cachePut(PersistentObject persistentObject, boolean storeState) {
     Map<String, CachedObject> classCache = cachedObjects.get(persistentObject.getClass());
     if (classCache==null) {
@@ -614,8 +598,11 @@ public class DbSqlSession implements Session {
       log.debug("now executing flush...");
     }
 
+    // 1、将insertObjects列表中的元素插入到数据库
     flushInserts();
+    // 2、执行方法getUpdatedObjects获得要更新的实体对象
     flushUpdates(updatedObjects);
+    // 3、将deleteOperations列表中的元素遍历执行
     flushDeletes(removedOperations);
   }
 
